@@ -8,7 +8,7 @@ function App() {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          'http://localhost:5000/api/database/search',
+          'https://cors-anywhere.herokuapp.com/https://vdjdb.cdr3.net/api/database/search',
           {
             filters: [
               {
@@ -19,7 +19,9 @@ function App() {
               }
             ]
           },
-          { headers: { "Content-Type": "application/json" } }
+          {
+            headers: { "Content-Type": "application/json" }
+          }
         );
 
         setData(response.data);
