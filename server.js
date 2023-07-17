@@ -3,6 +3,8 @@ const cors = require('cors');
 const axios = require('axios');
 const app = express();
 
+// app.use(cors());
+
 app.post('/api/database/search', async (req, res) => {
     console.log(req)
     try {
