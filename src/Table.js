@@ -80,24 +80,6 @@ const Table = ({ dataString, hasSearched }) => {
                         </tr>
                     ))}
                 </tbody>
-                {/* <tbody>
-                    {data.rows.map((row, index) => {
-                        if (row.entries[0] === 'TRA' && index > 0) {
-                            // Combine this cell's content with the previous row's content
-                            data.rows[index - 1].entries[1] += ', ' + row.entries[1]; // Assuming entries[1] is what you want to combine
-                            return null; // Don't render a separate row for this data
-                        }
-
-                        return (
-                            <tr key={index}>
-                                <td style={{ border: '1px solid black' }}>{index + 1}</td>
-                                {row.entries.slice(0, 11).map((entry, j) => (
-                                    <td key={j}>{entry}</td>
-                                ))}
-                            </tr>
-                        );
-                    })}
-                </tbody> */}
             </table>
         </div>
     );

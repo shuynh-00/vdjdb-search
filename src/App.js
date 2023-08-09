@@ -8,10 +8,8 @@ import Table from './Table';
 function App() {
   const [data, setData] = useState(null);
 
-  // const [searchValue, setSearchValue] = useState('');
   const [hasSearched, setHasSearched] = useState(0);
 
-  // useEffect(() => {
   const fetchData = async (searchedValue) => {
     try {
       const response = await axios({
@@ -22,14 +20,12 @@ function App() {
           filters: [
             {
               column: 'antigen.epitope',
-              // value: 'RLRPGGKKK'CLGGLLTMV,TRBV29-1*01	
               value: searchedValue,
               filterType: 'exact',
               negative: false,
             },
           ],
           paired: false,
-          // species: 'HomoSapiens',
         },
       });
 
@@ -41,8 +37,6 @@ function App() {
       console.log(error);
     }
   };
-  //   fetchData();
-  // }, [searchValue]);
 
 
   const handleSearch = (newValue) => {
@@ -59,8 +53,6 @@ function App() {
       <header className="App-header">
         <h1>VDJdb Search</h1>
         <Search onSearch={handleSearch} />
-        {/* {console.log(typeof (searchValue))} */}
-        {console.log(`result is: ${JSON.stringify(data)}`)}
       </header>
       <Table dataString={JSON.stringify(data)} hasSearched={hasSearched} />
     </div>
