@@ -1,7 +1,7 @@
 import React from 'react';
 import './Table.css';
 
-const Table = ({ dataString }) => {
+const Table = ({ dataString, hasSearched }) => {
 
     console.log(`testing ${dataString}`)
     let data;
@@ -14,20 +14,42 @@ const Table = ({ dataString }) => {
 
 
     // Return a message if dataString is null
-    if (dataString === 'null' || typeof data.rows === "undefined" || data.rows.length === 0) {
-        console.log("No searches for now")
+    if (dataString === 'null') {
         return <p>Enter your sequence</p>
     }
-    // else {
-    //     console.log('hi')
-    //     const data = JSON.parse(dataString);
-    //     console.log(data.rows.length)
-    //     return <p>It works</p>
-    // }
 
-    // Parse the stringified JSON data
+    // Check if there are no records found
+    if (data.recordsFound === 0) {
+        return <p>No results found</p>;
+    }
+
+    const combineRows = (data) => {
+        let combinedRows = [];
+        let previousRow = null;
+
+        data.rows.forEach((row) => {
+            if (row.entries[0] === "TRA" && previousRow) {
+                previousRow.entries = [...previousRow.entries, ...row.entries];
+            } else {
+                if (previousRow) {
+                    combinedRows.push(previousRow);
+                }
+                previousRow = { ...row }; // Make a shallow copy of the row
+            }
+        });
+
+        if (previousRow) {
+            combinedRows.push(previousRow);
+        }
+
+        return {
+            ...data,
+            rows: combinedRows,
+        };
+    };
 
 
+    const combinedData = combineRows(data);
     return (
         <div className='table-container'>
             <table>
@@ -49,7 +71,7 @@ const Table = ({ dataString }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.rows.map((row, i) => (
+                    {combinedData.rows.map((row, i) => (
                         <tr key={i}>
                             <td style={{ border: '1px solid black' }}>{i + 1}</td>
                             {row.entries.slice(0, 11).map((entry, j) => (
@@ -58,28 +80,26 @@ const Table = ({ dataString }) => {
                         </tr>
                     ))}
                 </tbody>
+                {/* <tbody>
+                    {data.rows.map((row, index) => {
+                        if (row.entries[0] === 'TRA' && index > 0) {
+                            // Combine this cell's content with the previous row's content
+                            data.rows[index - 1].entries[1] += ', ' + row.entries[1]; // Assuming entries[1] is what you want to combine
+                            return null; // Don't render a separate row for this data
+                        }
+
+                        return (
+                            <tr key={index}>
+                                <td style={{ border: '1px solid black' }}>{index + 1}</td>
+                                {row.entries.slice(0, 11).map((entry, j) => (
+                                    <td key={j}>{entry}</td>
+                                ))}
+                            </tr>
+                        );
+                    })}
+                </tbody> */}
             </table>
         </div>
-        // <>{console.log(data)}</>
-        // <div style={{ display: 'flex', justifyContent: 'center' }}>
-        //     <table style={{ border: '1px solid black', textAlign: 'center' }}>
-        //         <tbody>
-        //             {data.rows.map((row, index) => {
-        //                 if (index >= 11) return null;
-        //                 return (
-        //                     <tr key={index}>
-        //                         <td style={{ border: '1px solid black' }}>{index + 1}</td>
-        //                         {row.entries.map((entry, i) => (
-        //                             <td key={i} style={{ border: '1px solid black' }}>
-        //                                 {entry}
-        //                             </td>
-        //                         ))}
-        //                     </tr>
-        //                 );
-        //             })}
-        //         </tbody>
-        //     </table>
-        // </div>
     );
 };
 
